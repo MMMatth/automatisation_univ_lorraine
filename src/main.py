@@ -54,8 +54,8 @@ def main():
         # on extrait les informations des cours
         new_data = extract_course_info(edt,univ_lorraine_groups)
         
-        if new_data is None:
-            return False
+        # if new_data is None:
+        #     return False
         
         # on ajoute les evenements à l'agenda
         for course, details in new_data.items():
@@ -78,11 +78,11 @@ def main():
             # if google_calendar_instance.add_event(google_calendar_id, event) is None:
             #     return None
             google_calendar_instance.add_event(google_calendar_id, event)
-        return True
+    return True
             
 if __name__ == '__main__':
     if not main():
         print("Erreur lors de l'ajout des evenements à l'agenda")
     else:
-        print("success")
+        print("Success")
         
