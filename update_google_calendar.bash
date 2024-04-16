@@ -2,4 +2,4 @@
 
 source ./myenv/bin/activate
 cd ./src/
-python3 main.py
+echo $(python3 main.py)
