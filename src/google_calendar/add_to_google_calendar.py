@@ -14,12 +14,6 @@ SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 # classe qui permet d'intéragir avec l'api de google calendar
 class google_calendar:
-    # scopes pour l'api de google calendar
-    
-    # initialisation de la classe
-    # credentials_path: chemin vers le fichier credentials.json
-    # token_path: chemin vers le fichier token.json
-    # scopes: les scopes pour l'api de google calendar
     def __init__(self, credentials_path, scopes, token = "./token.json"):
         self.service = self.get_service(credentials_path, token, scopes)
 
@@ -31,6 +25,7 @@ class google_calendar:
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
+                print("Refreshed token")
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(credentials_path, scopes)
                 creds = flow.run_local_server(port=0)
@@ -53,9 +48,9 @@ class google_calendar:
             events = self.service.events().list(calendarId=calendar_id, pageToken=page_token).execute()
             
             for event in events['items']:
-               if ( self.service.events().delete(calendarId=calendar_id,  eventId=event['id']).execute() == None):
-                   print("Erreur sur le delete de l'event" + event['id'])
-               else:
+                if ( self.service.events().delete(calendarId=calendar_id,  eventId=event['id']).execute() == None):
+                    print("Erreur sur le delete de l'event" + event['id'])
+                else:
                 #    print("Event deleted: " + event['id'])
                     pass
     
@@ -92,26 +87,3 @@ class google_calendar:
             
             if not page_token:
                 break
-
-if __name__ == '__main__':
-    SCOPES = ["https://www.googleapis.com/auth/calendar"]
-    
-    calendar = google_calendar('../ressources/oauth.json', SCOPES, "../ressources/token.json")
-            
-    data = json.loads(open('../ressources/param.json').read())
-    
-    calendar_id = data['google_calendar_id']
-    # event = {
-    #     'summary': 'Test Event',
-    #     'start': {
-    #         'dateTime': '2022-01-01T09:00:00-07:00',
-    #         'timeZone': 'America/Los_Angeles',
-    #     },
-    #     'end': {
-    #         'dateTime': '2022-01-01T17:00:00-07:00',
-    #         'timeZone': 'America/Los_Angeles',
-    #     },
-    # }
-    
-    calendar.clear_all_events_afer_today_midnight(calendar_id)
-    
