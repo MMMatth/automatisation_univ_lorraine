@@ -2,8 +2,14 @@ import discord
 from discord.ext import commands
 import json
 import os
+import logging
 
-# Replace 'YOUR_BOT_TOKEN' with your bot's token
+"""
+Ce fichier est un bot discord qui permet d'envoyer des messages sur un channel discord.
+"""
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -27,7 +33,15 @@ config = load_config()
 
 @bot.event
 async def on_ready():
-    print(f'Bot is ready. Logged in as {bot.user}')
+    logging.info(f'Bot is ready. Logged in as {bot.user}')
+
+@bot.event
+async def on_disconnect():
+    logging.warning('Bot has disconnected')
+
+@bot.event
+async def on_resumed():
+    logging.info('Bot has resumed')
 
 @bot.command(name='send')
 async def send_message(ctx, *, message: str):

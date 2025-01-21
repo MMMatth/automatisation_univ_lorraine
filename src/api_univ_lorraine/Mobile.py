@@ -1,6 +1,8 @@
 import requests
+import os
+import sys
 
-from api_univ_lorraine.setup import MOBILE_URL, TIMETABLE_MOBILE_PATH
+from api_univ_lorraine import MOBILE_URL, TIMETABLE_MOBILE_PATH
 
 # classe qui permet d'intéragir avec l'api de multi
 class Mobile:

@@ -1,8 +1,21 @@
 import datetime
 import json
 import requests
+import sys
+import os
+import logging
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from api_univ_lorraine.Mdw import Mdw
 from api_univ_lorraine.Utilisateur import Utilisateur
+
+"""
+Ce fichier sert a faire le lien entre l'api de l'université de lorraine et discord.
+"""
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
 
 # Path to the configuration file
 CONFIG_FILE = 'ressources/config.json'
@@ -22,9 +35,9 @@ def send_discord_message(channel_id, token, message):
     }
     response = requests.post(url, headers=headers, json=data)
     if response.status_code == 200:
-        print("Message sent successfully")
+        logging.info("Message sent successfully")
     else:
-        print(f"Failed to send message: {response.status_code} - {response.text}")
+        logging.error(f"Failed to send message: {response.status_code} - {response.text}")
 
 def main():
     config = load_config()
@@ -38,10 +51,11 @@ def main():
 
     if nouvelle_notes:
         message = "@everyone nouvelle(s) note(s):\n" + "\n".join([f"{matiere}" for matiere, note in nouvelle_notes])
-        print(datetime.datetime.now(), message)
+        logging.info(f"{datetime.datetime.now()} {message}")
         send_discord_message(channel_id, token, message)
     else:
-        print(datetime.datetime.now(), "Pas de nouvelles notes")
+        # send_discord_message(channel_id, token, "Test")
+        logging.info(f"{datetime.datetime.now()} Pas de nouvelles notes")
 
 if __name__ == "__main__":
     main()

@@ -7,8 +7,6 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-import json
-
 
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 

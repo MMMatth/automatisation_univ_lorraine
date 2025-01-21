@@ -1,7 +1,10 @@
 import re
 import requests
-from api_univ_lorraine.setup import MOBILE_URL, AUTHENTICATION_MOBILE_PATH
+import os
+import sys
 import aiohttp
+from api_univ_lorraine import MOBILE_URL, AUTHENTICATION_MOBILE_PATH
+
 
 CAS_LOGIN_URL = 'https://auth.univ-lorraine.fr/login'
 CAS_SERVICE_VALIDATE_URL = 'https://auth.univ-lorraine.fr/serviceValidate'
