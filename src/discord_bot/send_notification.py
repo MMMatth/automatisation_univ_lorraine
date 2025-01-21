@@ -37,7 +37,7 @@ def main():
     nouvelle_notes = mdw.update_db()
 
     if nouvelle_notes:
-        message = "Nouvelles notes:\n" + "\n".join([f"{matiere}" for matiere, note in nouvelle_notes])
+        message = "@everyone nouvelle(s) note(s):\n" + "\n".join([f"{matiere}" for matiere, note in nouvelle_notes])
         print(datetime.datetime.now(), message)
         send_discord_message(channel_id, token, message)
     else:

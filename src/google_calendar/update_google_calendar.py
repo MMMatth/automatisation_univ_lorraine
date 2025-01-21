@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from api_univ_lorraine.Utilisateur import Utilisateur
 from api_univ_lorraine.Mobile import Mobile
 from google_calendar.add_to_google_calendar import google_calendar
-from api_univ_lorraine.TraducteurEntGoogle import from_ent_to_google
+from google_calendar.TraducteurEntGoogle import from_ent_to_google
 
 with open("ressources/config.json", "r") as file:
     config = json.load(file)

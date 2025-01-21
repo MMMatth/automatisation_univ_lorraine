@@ -108,9 +108,6 @@ class Mdw:
         self.conn.commit()
         return result
 
-
-
-
 def main():
     user = Utilisateur("username", "password")
     mdw = Mdw(user)
