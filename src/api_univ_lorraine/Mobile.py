@@ -1,4 +1,5 @@
 import requests
+
 from api_univ_lorraine.setup import MOBILE_URL, TIMETABLE_MOBILE_PATH
 
 # classe qui permet d'intéragir avec l'api de multi
