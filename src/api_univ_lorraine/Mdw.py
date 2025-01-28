@@ -1,4 +1,4 @@
-import sqlite3
+import json
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -7,12 +7,17 @@ from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+import os
 from api_univ_lorraine.Utilisateur import Utilisateur
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from data_base import data_base_manager
 
 MDW_URL = "https://mdw.univ-lorraine.fr/"
 GECKODRIVER_PATH = "ressources/geckodriver"
-DB_PATH = "ressources/notes.db"
+DB_PATH = "ressources/data.db"
 FIREFOX_PATH = "/usr/bin/firefox"
 
 class Mdw:
@@ -25,20 +30,9 @@ class Mdw:
         if not os.path.isfile(GECKODRIVER_PATH):
             print("Geckodriver not found")
         self.driver = webdriver.Firefox(service=Service(GECKODRIVER_PATH), options=options)
-        self.conn = sqlite3.connect(DB_PATH)
-        self.create_table()
 
+        self.db_manager = data_base_manager.DatabaseManager(DB_PATH)
 
-    def create_table(self):
-        cursor = self.conn.cursor()
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS notes (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nom_matiere TEXT,
-                note FLOAT
-            )
-        """)
-        self.conn.commit()
 
 
     def login(self):
@@ -85,34 +79,15 @@ class Mdw:
         return data
 
     def update_db(self):
-        """
-        Met à jour la base de données
-        :return: list of tuples (nom_matiere, note)
-        """
-        new_data = self.get_notes()
-        cursor = self.conn.cursor()
-
-        cursor.execute("SELECT nom_matiere, note FROM notes")
-        old_data = {row[0]: row[1] for row in cursor.fetchall()}
-        result = []
-
-        for matiere, note in new_data:
-            if matiere not in old_data: # dans le cas où la matière n'est pas dans la base de données
-                cursor.execute("INSERT INTO notes (nom_matiere, note) VALUES (?, ?)", (matiere, note))
-                result.append((matiere, note))
-            elif note is not None and note != old_data[matiere]:
-                cursor.execute("UPDATE notes SET note = ? WHERE nom_matiere = ?", (note, matiere))
-                result.append((matiere, note))
-
-        self.conn.commit()
-        return result
+        return self.db_manager.nouvelle_note(self.get_notes())
 
 def main():
-    user = Utilisateur("username", "password")
+    with open("ressources/config.json") as f:
+        config = json.load(f)
+    user = Utilisateur(config.get('LOGIN'), config.get('PASSWORD'))
     mdw = Mdw(user)
     mdw.login()
     nouvelle_notes = mdw.update_db()
-    print(nouvelle_notes)
 
 if __name__ == '__main__':
     main()

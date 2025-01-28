@@ -6,8 +6,8 @@ import os
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from google_calendar.add_to_google_calendar import google_calendar
-from google_calendar.TraducteurEntGoogle import from_ent_to_google
+from add_to_google_calendar import google_calendar
+from TraducteurEntGoogle import from_ent_to_google
 from api_univ_lorraine.Utilisateur import Utilisateur
 from api_univ_lorraine.Mobile import Mobile
 

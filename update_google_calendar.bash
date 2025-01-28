@@ -7,7 +7,7 @@ start_update() {
     cd /home/matth/server/univ-lorraine/src/
     source ../myenv/bin/activate
     echo "Execution de update_google_calendar.bash le $(date)"
-    python3 main.py &
+    python3 google_calendar/update_google_calendar.py &
     echo $! > $PIDFILE
     echo "Update script started with PID $(cat $PIDFILE)"
 }

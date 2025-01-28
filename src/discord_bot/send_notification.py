@@ -9,10 +9,12 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from api_univ_lorraine.Mdw import Mdw
 from api_univ_lorraine.Utilisateur import Utilisateur
+from data_base import data_base_manager
 
 """
 Ce fichier sert a faire le lien entre l'api de l'université de lorraine et discord.
 """
+
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -41,7 +43,8 @@ def send_discord_message(channel_id, token, message):
 
 def main():
     config = load_config()
-    channel_id = config.get('channel_id')
+    db_manager = data_base_manager.DatabaseManager('ressources/data.db')
+    channels_id = db_manager.get_all_channels(True)
     token = config.get('TOKEN_DISCORD')
 
     user = Utilisateur(config.get('LOGIN'), config.get('PASSWORD'))
@@ -49,13 +52,13 @@ def main():
     mdw.login()
     nouvelle_notes = mdw.update_db()
 
-    if nouvelle_notes:
-        message = "@everyone nouvelle(s) note(s):\n" + "\n".join([f"{matiere}" for matiere, note in nouvelle_notes])
-        logging.info(f"{datetime.datetime.now()} {message}")
-        send_discord_message(channel_id, token, message)
-    else:
-        # send_discord_message(channel_id, token, "Test")
-        logging.info(f"{datetime.datetime.now()} Pas de nouvelles notes")
+    for channel_id in channels_id:
+        if nouvelle_notes:
+            message = " nouvelle(s) note(s):\n" + "\n".join([f"{matiere}" for matiere, note in nouvelle_notes])
+            logging.info(f"{datetime.datetime.now()} {message}")
+            send_discord_message(channel_id, token, message)
+        else:
+            logging.info(f"{datetime.datetime.now()} Pas de nouvelles notes")
 
 if __name__ == "__main__":
     main()
