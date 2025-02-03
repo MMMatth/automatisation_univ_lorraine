@@ -1,48 +1,60 @@
-# Université Lorraine support
-Ceci est un petit support pour l'université de lorraine.
+# Université Lorraine Automatisation
+
+Ce repo contient différentes automatisations pour l'Université de Lorraine, utilisant des supports pour l'Université de Lorraine, dont le Mobile inspiré de [ce repo](https://github.com/maelgangloff/univ-lorraine-api).
+
 ## Mobile
-Support pour recuperer l'emploie du temp de l'université lorraine grace a l'api de l'université lorraine
+
+Support pour récupérer l'emploi du temps de l'Université de Lorraine grâce à l'API de l'Université de Lorraine. Il est possible d'ajouter d'autres fonctionnalités dans le futur. Si vous avez besoin d'autres choses, regardez le repo mentionné ci-dessus.
+
 ## MDW
-Support pout recuperer les notes de l'université lorraine avec du scrapping
 
-Pour ce support il est important d'avoir firefox d'installer sur votre machine present de base `/usr/bin/firefox` 
-ainsi que geckodriver dans le path de votre machine `src/ressources/geckodriver`
+Support pour récupérer les notes de l'Université de Lorraine avec du scrapping.
 
-## Bot discord
-J'ai fait un bot discord pour que quand il y'a une nouvelle note sur MDW il envoie un message sur discord.
-Le bot est fait avec discord.py. 
-Le script qui verifie les notes est dans send_notification.py et doit etre lancé tout un certain temps pour verifier les notes ( avec cron par exemple )
+### Prérequis
+Il est important d'avoir Firefox installé sur votre machine, à l'emplacement par défaut `/usr/bin/firefox`, ou de modifier le chemin dans le fichier Python. De plus, vous devez avoir `geckodriver` dans le chemin de votre machine, dans `src/ressources/geckodriver`, ou changer le chemin.
 
-### Commande du bot
-- `!here` : permet de s'inscrire pour recevoir les notifications
-- `!remove` : permet de se desinscrire pour ne plus recevoir les notifications
-- `!aide` : affiche les commandes
+## Bot Discord
 
-## Sync avec google calendar
-C'est un script qui permet de synchroniser l'emploie du temps de l'université lorraine avec google calendar. Il peut etre lancé avec cron par exemple pour mettre a jour l'emploie du temps sur google calendar.
+J'ai créé un bot Discord pour qu'à chaque fois qu'il y a une nouvelle note sur MDW, il envoie un message sur Discord.  
+Le bot est développé avec `discord.py`.  
+Le script qui vérifie les notes est dans `send_notification.py` et doit être lancé périodiquement pour vérifier les notes (par exemple, avec cron).  
+Pour faire fonctionner le bot, vous avez besoin d'un serveur pour le mettre en ligne.
 
-**Attention  le script supprime tout les evenements de l'emploie du temps sur google calendar et les remet a jour donc il est important d'utiliser un calendrier a part pour ne pas perdre les evenements deja present sur google calendar.**
+### Commandes du bot
+- `!here` : Inscrit le channel courant pour recevoir les notifications.
+- `!remove` : Désinscrit le channel courant pour ne plus recevoir les notifications.
+- `!aide` : Affiche les commandes disponibles.
 
-Il est important de suivre les instructions de ce lien pour pouvoir utiliser l'api google calendar
-[quickstart google calendar python
-](https://developers.google.com/calendar/api/quickstart/python)
+## Synchronisation avec Google Calendar
 
-## Config
-Le fichier `src/ressources/config.json` doit ressembler à ça
+C'est un script qui permet de synchroniser l'emploi du temps de l'Université de Lorraine avec Google Calendar. Il peut être lancé périodiquement avec cron, par exemple, pour mettre à jour l'emploi du temps sur Google Calendar.
+
+**Attention :** Le script supprime tous les événements de l'emploi du temps sur Google Calendar et les remet à jour. Il est donc important d'utiliser un calendrier séparé pour ne pas perdre les événements déjà présents sur Google Calendar.
+
+Il est important de suivre les instructions de ce lien pour pouvoir utiliser l'API Google Calendar :  
+[Quickstart Google Calendar Python](https://developers.google.com/calendar/api/quickstart/python)
+
+## Configuration
+
+### config.json
+J'utilise un fichier de configuration qui est dans le `.gitignore` pour des raisons évidentes. Voici à quoi il doit ressembler.  
+Le fichier `src/ressources/config.json` doit avoir le format suivant :
+
 ```json
 {
-  "LOGIN": "username", // votre login de l'université lorraine
-  "PASSWORD": "password",   // votre mot de passe de l'université
-  "CALENDAR_ID": "id_google_calendar",  // id du calendrier google calendar ( Un calendrier a part pour ne pas perdre les evenements deja present )
-  "NB_JOUR": 30, // nombre de jour a recuperer
-  "TOKEN_DISCORD": "token du bot discord", // token du bot discord
-  "channel_id" : "id du channel discord" // id du channel discord
+  "LOGIN": "username",  // Votre login de l'Université de Lorraine
+  "PASSWORD": "password",  // Votre mot de passe de l'Université
+  "CALENDAR_ID": "id_google_calendar",  // ID de votre Google Calendar (un calendrier séparé pour ne pas perdre les événements déjà présents)
+  "NB_JOUR": 30,  // Nombre de jours à récupérer
+  "TOKEN_DISCORD": "token_du_bot_discord",  // Token du bot Discord
+  "CHANNEL_ID": "id_du_channel_discord"  // ID du channel Discord
 }
 ```
+### Dossier Ressources
 
-donc le dossier ressources contient : 
-- `geckodriver` : le driver pour firefox pour le scrapping
-- `config.json` : le fichier de configuration 
-- `oauth.json` : le fichier de credentials pour google calendar
-- `token.json` : le fichier de token pour google calendar generated par le quickstart
-- `notes.db` : la base de donnée sqlite pour les notes generé automatiquement par MDW
+Le dossier ressources contient plusieurs éléments que vous devez télécharger :
+- `geckodriver` : Le driver pour Firefox pour le scrapping.
+- `config.json` : Le fichier de configuration.
+- `oauth.json` : Le fichier de credentials pour Google Calendar.
+- `token.json` : Le fichier de token pour Google Calendar généré par le Quickstart.
+- `notes.db` : La base de données SQLite pour les notes, générée automatiquement par MDW.
